@@ -2,6 +2,15 @@
   "object": {
     "pins": [
       {
+        "package": "BlockObserver",
+        "repositoryURL": "https://github.com/impul/BlockObserver.git",
+        "state": {
+          "branch": null,
+          "revision": "e99e65041666d3dff5a998aaa088c3447ccfc725",
+          "version": "0.1.0"
+        }
+      },
+      {
         "package": "Console",
         "repositoryURL": "https://github.com/vapor/console.git",
         "state": {

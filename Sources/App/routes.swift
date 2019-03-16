@@ -1,20 +1,43 @@
 import Vapor
+import BlockObserver
 
-/// Register your application's routes here.
+var blockObserver = BlockObserver(assets: [.ethereum, .ripple])
+
 public func routes(_ router: Router) throws {
-    // Basic "It works" example
-    router.get { req in
-        return "It works!"
+    //http://localhost:8080/add/0xB29f7E1AB952CF2770D56712e4667680F55359eb/ethereum
+    router.get("add", String.parameter, String.parameter) { req -> [String: String] in
+        let parametrs = req.parameters.values
+        let address = parametrs[0].value
+        guard let coin = coin(name: parametrs[1].value) else {
+            return ["error": "Unsupported coin"]
+        }
+        blockObserver.addObserver(for: address, asset: coin)
+        return ["info": "Observer for \(address) added"]
     }
     
-    // Basic "Hello, world!" example
-    router.get("hello") { req in
-        return "Hello, world!"
+    router.get("remove", String.parameter, String.parameter) { req -> [String: String] in
+        let parametrs = req.parameters.values
+        let address = parametrs[0].value
+        guard let coin = coin(name: parametrs[1].value) else {
+            return ["error": "Unsupported coin"]
+        }
+        blockObserver.removeObserver(for: address, asset: coin)
+        return ["info": "Observer for \(address) removed"]
     }
 
-    // Example of configuring a controller
-    let todoController = TodoController()
-    router.get("todos", use: todoController.index)
-    router.post("todos", use: todoController.create)
-    router.delete("todos", Todo.parameter, use: todoController.delete)
+    router.get("transactions") { req -> [String] in
+        return blockObserver.transactions.map {
+            return $0.txId
+        }
+    }
+    
+    func coin(name: String) -> Asset? {
+        switch name {
+        case "ethereum":
+            return .ethereum
+        case "ripple":
+            return .ripple
+        default: return nil
+        }
+    }
 }
