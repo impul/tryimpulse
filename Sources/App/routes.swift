@@ -25,9 +25,11 @@ public func routes(_ router: Router) throws {
         return ["info": "Observer for \(address) removed"]
     }
 
-    router.get("transactions") { req -> [String] in
+    router.get("transactions") { req -> [[String: String]] in
         return blockObserver.transactions.map {
-            return $0.txId
+            return ["txId": $0.txId,
+                    "asset": coinString(name: $0.asset),
+                    "address": $0.receiverAddress]
         }
     }
     
@@ -38,6 +40,15 @@ public func routes(_ router: Router) throws {
         case "ripple":
             return .ripple
         default: return nil
+        }
+    }
+    
+    func coinString(name: Asset) -> String {
+        switch name {
+        case .ethereum:
+            return "ethereum"
+        case .ripple:
+            return "ripple"
         }
     }
 }
