@@ -1,5 +1,6 @@
 import Vapor
 import BlockObserver
+import GoogleAnalyticsProvider
 
 var blockObserver = BlockObserver(assets: [.ethereum, .ripple])
 
@@ -26,6 +27,8 @@ public func routes(_ router: Router) throws {
     }
 
     router.get("transactions") { req -> [[String: String]] in
+        let gac = try req.make(GoogleAnalyticsClient.self)
+        gac.send(hit: .event(category: "API", action: "create TODO"))
         return blockObserver.transactions.map {
             return ["txId": $0.txId,
                     "asset": coinString(name: $0.asset),

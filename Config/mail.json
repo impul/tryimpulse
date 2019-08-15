@@ -1,0 +1,8 @@
+{
+    "smtpHost": "smtp.mailgun.org",
+    "smtpPort": "587",
+    "user": "postmaster@sandbox2d9c50f454d34d329835e180242fd87f.mailgun.org",
+    "password": "ad52fc44e47cd11db0b3955e3972149b-898ca80e-a8bea198",
+    "fromEmail": "admin@tryimpulse.me",
+    "fromName": "Impulse Me"
+}

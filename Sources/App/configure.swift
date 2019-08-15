@@ -1,5 +1,6 @@
 import FluentSQLite
 import Vapor
+import GoogleAnalyticsProvider
 
 /// Called before your application initializes.
 public func configure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
@@ -29,4 +30,9 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     var migrations = MigrationConfig()
     migrations.add(model: Todo.self, database: .sqlite)
     services.register(migrations)
+    
+    let googleConfig = GoogleAnalyticsConfig(trackingID: "UA-141026697-1")
+    services.register(googleConfig)
+    let provider = GoogleAnalyticsProvider()
+    services.register(provider)
 }
